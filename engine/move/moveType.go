@@ -19,5 +19,5 @@ const (
 	NPROMCAPTURE uint32 = 0b1111
 	
 	CAPTUREMASK	 uint32 = 0b100
-	PROMMASK		 uint32 = 0b1000
+	PROMMASK     uint32 = 0b1000
 )

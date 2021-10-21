@@ -41,46 +41,28 @@ func PositionFromFEN(FEN *string) *position.Position {
 			col = 0
 			row--
 			break
-		case 'K':
-			fallthrough
-		case 'k':
-			fallthrough
-		case 'Q':
-			fallthrough
-		case 'q':
-			fallthrough
-		case 'B':
-			fallthrough
-		case 'b':
-			fallthrough
-		case 'N':
-			fallthrough
-		case 'n':
-			fallthrough
-		case 'R':
-			fallthrough
-		case 'r':
-			fallthrough
-		case 'P':
-			fallthrough
+		case 'K':	fallthrough
+		case 'k':	fallthrough
+		case 'Q':	fallthrough
+		case 'q':	fallthrough
+		case 'B':	fallthrough
+		case 'b':	fallthrough
+		case 'N':	fallthrough
+		case 'n':	fallthrough
+		case 'R':	fallthrough
+		case 'r':	fallthrough
+		case 'P':	fallthrough
 		case 'p':
 			newPos.Pieces[BBIdx[char]] |= 1 << (row * 8 + col)
 			col++
 			break
-		case '1':
-			fallthrough
-		case '2':
-			fallthrough
-		case '3':
-			fallthrough
-		case '4':
-			fallthrough
-		case '5':
-			fallthrough
-		case '6':
-			fallthrough
-		case '7':
-			fallthrough
+		case '1':	fallthrough
+		case '2':	fallthrough
+		case '3':	fallthrough
+		case '4':	fallthrough
+		case '5':	fallthrough
+		case '6':	fallthrough
+		case '7':	fallthrough
 		case '8':
 			charVal := int(char - '0')
 			col += charVal

@@ -9,7 +9,7 @@ const (
 	moveTypeOffset   uint32 = 12
 	moveTypeMask     uint32 = 0xf << moveTypeOffset
 	mainPieceOffset	 uint32 = 16
-	mainPieceMask	   uint32 = 0xf << mainPieceOffset
+	mainPieceMask    uint32 = 0xf << mainPieceOffset
 	extraPieceOffset uint32 = 20
 	extraPieceMask   uint32 = 0xf << extraPieceOffset
 )
