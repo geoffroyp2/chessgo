@@ -6,9 +6,17 @@ import (
 )
 
 func GenerateMoves(pos *position.Position, moveArray *constants.MoveArray) int {
-
 	moveAmount := 0
-	moveAmount = getPawnMoves(pos, moveArray, moveAmount)
+
+	if pos.GetPlayerTurn() == 0 {
+
+		moveAmount = wPawnMoves(pos, moveArray, moveAmount)
+
+	} else {
+
+		moveAmount = bPawnMoves(pos, moveArray, moveAmount)
+
+	}
 
 	return moveAmount
 }

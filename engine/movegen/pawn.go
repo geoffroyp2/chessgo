@@ -1,5 +1,10 @@
 package movegen
 
+/*
+	TODO: change captures to use precomputed patterns
+	https://www.chessprogramming.org/Pawn_Attacks_(Bitboards)
+*/
+
 import (
 	"math/bits"
 
@@ -9,16 +14,15 @@ import (
 	"github.com/geoffroyp2/chessgo/engine/position"
 )
 
-func getPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmount int) int {
+func wPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmount int) int {
+	moveAmount = wMoves(pos, moveArray, moveAmount)
+	moveAmount = wCaptures(pos, moveArray, moveAmount)
+	return moveAmount
+}
 
-	if pos.GetPlayerTurn() == 0 {
-		moveAmount = wMoves(pos, moveArray, moveAmount)
-		moveAmount = wCaptures(pos, moveArray, moveAmount)
-	} else {
-		moveAmount = bMoves(pos, moveArray, moveAmount)		
-		moveAmount = bCaptures(pos, moveArray, moveAmount)
-	}
-
+func bPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmount int) int {
+	moveAmount = bMoves(pos, moveArray, moveAmount)		
+	moveAmount = bCaptures(pos, moveArray, moveAmount)
 	return moveAmount
 }
 
