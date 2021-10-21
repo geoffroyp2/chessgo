@@ -1,7 +1,5 @@
 package position
 
-import "github.com/geoffroyp2/chessgo/engine/constants"
-
 
 type Position struct {
 	Pieces [12]uint64 // All pieces as bitboards + unions of all black and all white pieces
@@ -18,11 +16,11 @@ func NewPosition() *Position {
 	return &Position{}
 }
 
-func (pos *Position) GetPieceBB(pType constants.PieceType) uint64 {
+func (pos *Position) GetPieceBB(pType uint32) uint64 {
 	return pos.Pieces[pType]
 }
 
-func (pos *Position) SetPieceBB(pType constants.PieceType, newValue uint64) {
+func (pos *Position) SetPieceBB(pType uint32, newValue uint64) {
 	pos.Pieces[pType] = newValue
 }
 

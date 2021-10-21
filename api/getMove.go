@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 
+	"github.com/geoffroyp2/chessgo/engine/constants"
 	"github.com/geoffroyp2/chessgo/engine/fen"
 	"github.com/geoffroyp2/chessgo/engine/move"
 	"github.com/geoffroyp2/chessgo/engine/movegen"
@@ -18,7 +19,7 @@ func getMove(FENString *string) *[]byte {
 	pos := fen.PositionFromFEN(FENString)
 	pos.PrintPosition()
 
-	var moveArray [400]uint32
+	var moveArray constants.MoveArray
 	moveAmount := movegen.GenerateMoves(pos, &moveArray)
 
 	for i := 0; i < moveAmount; i++ {

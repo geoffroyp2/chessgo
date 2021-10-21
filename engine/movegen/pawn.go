@@ -9,7 +9,7 @@ import (
 	"github.com/geoffroyp2/chessgo/engine/position"
 )
 
-func getPawnMoves(pos *position.Position, moveArray *[400]uint32, moveAmount int) int {
+func getPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmount int) int {
 
 	if pos.GetPlayerTurn() == 0 {
 		moveAmount = wMoves(pos, moveArray, moveAmount)
@@ -22,7 +22,7 @@ func getPawnMoves(pos *position.Position, moveArray *[400]uint32, moveAmount int
 	return moveAmount
 }
 
-func wMoves(pos *position.Position, moveArray *[400]uint32, moveAmount int) int {
+func wMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmount int) int {
 	// Intersection of empty squares shifted down once and set of pawns
 	pushablePawns := bitboard.ShiftS(pos.Empty) & pos.Pieces[constants.WHITEPAWN]
 	
@@ -63,7 +63,7 @@ func wMoves(pos *position.Position, moveArray *[400]uint32, moveAmount int) int 
 	return moveAmount
 }
 
-func wCaptures(pos *position.Position, moveArray *[400]uint32, moveAmount int) int {
+func wCaptures(pos *position.Position, moveArray *constants.MoveArray, moveAmount int) int {
 
 	// Shift all black pieces in the reverse direction of the pawn capture & intersect with set of pawns
 	captureR := bitboard.ShiftSW(pos.AllBlack) & pos.Pieces[constants.WHITEPAWN]
@@ -177,7 +177,7 @@ func wCaptures(pos *position.Position, moveArray *[400]uint32, moveAmount int) i
 	return moveAmount
 }
 
-func bMoves(pos *position.Position, moveArray *[400]uint32, moveAmount int) int {
+func bMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmount int) int {
 	// Intersection of empty squares shifted up once and set of pawns
 	pushablePawns := bitboard.ShiftN(pos.Empty) & pos.Pieces[constants.BLACKPAWN]
 	dblPushable := pushablePawns & bitboard.ShiftN(bitboard.ShiftN(pos.Empty & constants.Rank5)) // Empty rank 5 shifted 2 times
@@ -216,8 +216,7 @@ func bMoves(pos *position.Position, moveArray *[400]uint32, moveAmount int) int 
 	return moveAmount
 }
 
-
-func bCaptures(pos *position.Position, moveArray *[400]uint32, moveAmount int) int {
+func bCaptures(pos *position.Position, moveArray *constants.MoveArray, moveAmount int) int {
 
 	// Shift all black pieces in the reverse direction of the pawn capture & intersect with set of pawns
 	captureR := bitboard.ShiftNW(pos.AllWhite) & pos.Pieces[constants.BLACKPAWN]

@@ -1,6 +1,6 @@
 package constants
 
-type PieceType int
+type MoveArray [250]uint32 // 218 is the maximum moves amount for a given position, 250 to be safe
 
 const (
 	WHITEKING   uint32 = iota
