@@ -23,7 +23,10 @@ func getMove(FENString *string) *[]byte {
 	moveAmount := movegen.GenerateMoves(pos, &moveArray)
 
 	for i := 0; i < moveAmount; i++ {
-		move.PrintMove(moveArray[i])
+		piece := move.MainPiece(moveArray[i]) 
+		if (piece == constants.BLACKKNIGHT || piece == constants.WHITEKNIGHT){
+			move.PrintMove(moveArray[i])
+		}
 	}
 
 	moveResponse := MoveResponse{FEN: "", Move: ""}
