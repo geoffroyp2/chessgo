@@ -13,12 +13,14 @@ func GenerateMoves(pos *position.Position, moveArray *constants.MoveArray) int {
 		moveAmount = wPawnMoves(pos, moveArray, moveAmount)
 		moveAmount = wKnightMoves(pos, moveArray, moveAmount)
 		moveAmount = wRookMoves(pos, moveArray, moveAmount)
+		moveAmount = wBishopMoves(pos, moveArray, moveAmount)
 		
 	} else {
 			
 		moveAmount = bPawnMoves(pos, moveArray, moveAmount)
 		moveAmount = bKnightMoves(pos, moveArray, moveAmount)
 		moveAmount = bRookMoves(pos, moveArray, moveAmount)
+		moveAmount = bBishopMoves(pos, moveArray, moveAmount)
 
 	}
 
