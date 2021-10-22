@@ -2,6 +2,11 @@ package constants
 
 type MoveArray [250]uint32 // 218 is the maximum moves amount for a given position, 250 to be safe
 
+const (
+	PLAYERWHITE uint16 = iota
+	PLAYERBLACK uint16 = iota
+)
+
 // Piece types
 const (
 	WHITEKING   uint32 = iota

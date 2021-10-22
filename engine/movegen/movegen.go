@@ -8,12 +8,13 @@ import (
 func GenerateMoves(pos *position.Position, moveArray *constants.MoveArray) int {
 	moveAmount := 0
 
-	if pos.GetPlayerTurn() == 0 {
+	if pos.GetPlayerTurn() == constants.PLAYERWHITE {
 
 		moveAmount = wPawnMoves(pos, moveArray, moveAmount)
 		moveAmount = wKnightMoves(pos, moveArray, moveAmount)
 		moveAmount = wRookMoves(pos, moveArray, moveAmount)
 		moveAmount = wBishopMoves(pos, moveArray, moveAmount)
+		moveAmount = wQueenMoves(pos, moveArray, moveAmount)
 		
 	} else {
 			
@@ -21,6 +22,7 @@ func GenerateMoves(pos *position.Position, moveArray *constants.MoveArray) int {
 		moveAmount = bKnightMoves(pos, moveArray, moveAmount)
 		moveAmount = bRookMoves(pos, moveArray, moveAmount)
 		moveAmount = bBishopMoves(pos, moveArray, moveAmount)
+		moveAmount = bQueenMoves(pos, moveArray, moveAmount)
 
 	}
 
