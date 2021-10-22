@@ -47,9 +47,6 @@ func (pos *Position) PrintPosition() {
 		case 4: 
 			sb.WriteString(fmt.Sprintf(" |  Half-moves clock: %d", pos.HMClock))
 			break
-		case 5: 
-			sb.WriteString(fmt.Sprintf(" |  Move number: %d", pos.MoveNumber))
-			break
 		default:
 			sb.WriteString(" |")
 		}

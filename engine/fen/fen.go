@@ -111,13 +111,13 @@ func PositionFromFEN(FEN *string) *position.Position {
 		newPos.HMClock = uint16(val2)
 	}
 	
-	// Section 5: Move number 
-	val2, err = strconv.Atoi(sections[5])
-	if err != nil {
-		fmt.Println("Could not parse Move Number: ", sections[5], err)
-	} else {
-		newPos.MoveNumber = uint32(val2)
-	}
+	// Section 5: Move number // Not necessary
+	// val2, err = strconv.Atoi(sections[5])
+	// if err != nil {
+	// 	fmt.Println("Could not parse Move Number: ", sections[5], err)
+	// } else {
+	// 	newPos.MoveNumber = uint32(val2)
+	// }
 	
 	return newPos
 }
