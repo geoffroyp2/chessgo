@@ -11,25 +11,25 @@ func ShiftS(bb uint64) uint64 {
 }
 
 func ShiftE(bb uint64) uint64 {
-	return bb << 1 & constants.NotAFile
+	return bb << 1 & constants.NotFileA
 }
 
 func ShiftNE(bb uint64) uint64 {
-	return bb << 9 & constants.NotAFile
+	return bb << 9 & constants.NotFileA
 }
 
 func ShiftSE(bb uint64) uint64 {
-	return bb >> 7 & constants.NotAFile
+	return bb >> 7 & constants.NotFileA
 }
 
 func ShiftW(bb uint64) uint64 {
-	return bb >> 1 & constants.NotHFile
+	return bb >> 1 & constants.NotFileH
 }
 
 func ShiftNW(bb uint64) uint64 {
-	return bb << 7 & constants.NotHFile
+	return bb << 7 & constants.NotFileH
 }
 
 func ShiftSW(bb uint64) uint64 {
-	return bb >> 9 & constants.NotHFile
+	return bb >> 9 & constants.NotFileH
 }
