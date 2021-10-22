@@ -1,8 +1,113 @@
 package movegen
 
-import "math/bits"
+import (
+	"math/bits"
 
-// Returns the set  of moves in the specified direction + true if the ray was blocked by another piece
+	"github.com/geoffroyp2/chessgo/engine/constants"
+	"github.com/geoffroyp2/chessgo/engine/move"
+	"github.com/geoffroyp2/chessgo/engine/position"
+)
+
+// ProcessRay takes the strat index and direction of a ray and adds creates all vail moves and attacks
+
+func processWPosRay(idx, dir, pieceType uint32, pos *position.Position, moveArray *constants.MoveArray, moveAmount int) int {
+	
+	attacks, isBlocked := getPosRay(pos.Occupied, idx, dir)
+
+	if isBlocked {
+		destIdx := uint32(bits.Len64(attacks) - 1)
+		if pos.AllBlack & (1<<destIdx) != 0 {
+			capturedPiece := getBCapturedPiece(pos, destIdx)
+			(*moveArray)[moveAmount] = move.CreateMove(idx, destIdx, move.CAPTURE, pieceType, capturedPiece)
+			moveAmount++
+		}
+		attacks ^= 1<<destIdx
+	}
+
+	for attacks != 0 {
+		destIdx := uint32(bits.Len64(attacks) - 1)
+		(*moveArray)[moveAmount] = move.CreateMove(idx, destIdx, move.MOVE, pieceType, constants.NULLPIECE)
+		moveAmount++
+		attacks ^= 1<<destIdx
+	}
+
+	return moveAmount
+}
+
+func processWNegRay(idx, dir, pieceType uint32, pos *position.Position, moveArray *constants.MoveArray, moveAmount int) int {
+	
+	attacks, isBlocked := getNegRay(pos.Occupied, idx, dir)
+	
+	if isBlocked {
+		destIdx := uint32(bits.TrailingZeros64(attacks))
+		if pos.AllBlack & (1<<destIdx) != 0 {
+			capturedPiece := getBCapturedPiece(pos, destIdx)
+			(*moveArray)[moveAmount] = move.CreateMove(idx, destIdx, move.CAPTURE, pieceType, capturedPiece)
+			moveAmount++
+		}
+		attacks ^= 1<<destIdx
+	}
+	
+	for attacks != 0 {
+		destIdx := uint32(bits.TrailingZeros64(attacks))
+		(*moveArray)[moveAmount] = move.CreateMove(idx, destIdx, move.MOVE, pieceType, constants.NULLPIECE)
+		moveAmount++
+		attacks ^= 1<<destIdx
+	}
+
+	return moveAmount
+}
+
+func processBPosRay(idx, dir, pieceType uint32, pos *position.Position, moveArray *constants.MoveArray, moveAmount int) int {
+	
+	attacks, isBlocked := getPosRay(pos.Occupied, idx, dir)
+	
+	if isBlocked {
+		destIdx := uint32(bits.Len64(attacks) - 1)
+		if pos.AllWhite & (1<<destIdx) != 0 {
+			capturedPiece := getWCapturedPiece(pos, destIdx)
+			(*moveArray)[moveAmount] = move.CreateMove(idx, destIdx, move.CAPTURE, pieceType, capturedPiece)
+			moveAmount++
+		}
+		attacks ^= 1<<destIdx
+	}
+
+	for attacks != 0 {
+		destIdx := uint32(bits.Len64(attacks) - 1)
+		(*moveArray)[moveAmount] = move.CreateMove(idx, destIdx, move.MOVE, pieceType, constants.NULLPIECE)
+		moveAmount++
+		attacks ^= 1<<destIdx
+	}
+	
+	return moveAmount
+}
+
+func processBNegRay(idx, dir, pieceType uint32, pos *position.Position, moveArray *constants.MoveArray, moveAmount int) int {
+	
+	attacks, isBlocked := getNegRay(pos.Occupied, idx, dir)
+	
+	if isBlocked {
+		destIdx := uint32(bits.TrailingZeros64(attacks))
+		if pos.AllWhite & (1<<destIdx) != 0 {
+			capturedPiece := getWCapturedPiece(pos, destIdx)
+			(*moveArray)[moveAmount] = move.CreateMove(idx, destIdx, move.CAPTURE, pieceType, capturedPiece)
+			moveAmount++
+		}
+		attacks ^= 1<<destIdx
+	}
+
+	for attacks != 0 {
+		destIdx := uint32(bits.TrailingZeros64(attacks))
+		(*moveArray)[moveAmount] = move.CreateMove(idx, destIdx, move.MOVE, pieceType, constants.NULLPIECE)
+		moveAmount++
+		attacks ^= 1<<destIdx
+	}
+
+	return moveAmount
+}
+
+
+// get[Pos/Neg]Ray Returns the set  of moves in the specified direction + true if the ray was blocked by another piece
 // The difference between positive and negative is the direction of the bitscan to find the 1st blocker
 // The blocked square is part of the ray
 // Positive is NW, N, NE, E
