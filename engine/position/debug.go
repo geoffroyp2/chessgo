@@ -24,19 +24,20 @@ func (pos *Position) PrintPosition() {
 	}
 
 	var sb strings.Builder
+	sb.WriteRune('\n')
 	for row := 7; row >= 0; row-- {
 		for col := 0; col < 8; col++ {
 			sb.WriteRune(board[row * 8 + col])
 			sb.WriteRune(' ')
 		}
 		switch row {
-		case 1:
+		case 6:
 			sb.WriteString(fmt.Sprintf(" |  Next move: %s", *pos.getPlayerTurnString()))
 			break
-		case 2:
+		case 5:
 			sb.WriteString(fmt.Sprintf(" |  Castle: %s", *pos.getCastleRightsString()))
 			break
-		case 3:
+		case 4:
 			EPSquare := pos.GetEPSquare()
 			EPSquareString := "-"
 			if EPSquare != constants.EPSQUARE_NONE {
@@ -44,7 +45,7 @@ func (pos *Position) PrintPosition() {
 			}
 			sb.WriteString(fmt.Sprintf(" |  En-passant: %s", EPSquareString))
 			break
-		case 4: 
+		case 3: 
 			sb.WriteString(fmt.Sprintf(" |  Half-moves clock: %d", pos.HMClock))
 			break
 		default:
