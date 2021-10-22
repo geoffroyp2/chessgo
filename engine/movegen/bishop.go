@@ -54,14 +54,11 @@ func wBishopAttacks(pos *position.Position) uint64 {
 	bishops := pos.Pieces[constants.WHITEBISHOP]
 	for bishops != 0 {
 		bishopIdx := bits.TrailingZeros64(bishops)
-		ray, _ := getPosRay(pos.Occupied, uint32(bishopIdx), constants.DIRNE)
-		attacks |= ray
-		ray, _  = getPosRay(pos.Occupied, uint32(bishopIdx), constants.DIRNW)
-		attacks |= ray
-		ray, _  = getNegRay(pos.Occupied, uint32(bishopIdx), constants.DIRSE)
-		attacks |= ray
-		ray, _  = getNegRay(pos.Occupied, uint32(bishopIdx), constants.DIRSW)
-		attacks |= ray
+		ray1, _ := getPosRay(pos.Occupied, uint32(bishopIdx), constants.DIRNE)
+		ray2, _ := getPosRay(pos.Occupied, uint32(bishopIdx), constants.DIRNW)
+		ray3, _ := getNegRay(pos.Occupied, uint32(bishopIdx), constants.DIRSE)
+		ray4, _ := getNegRay(pos.Occupied, uint32(bishopIdx), constants.DIRSW)
+		attacks |= ray1 | ray2 | ray3 | ray4
 		bishops ^= 1<<bishopIdx
 	}
 	return attacks
@@ -72,14 +69,11 @@ func bBishopAttacks(pos *position.Position) uint64 {
 	bishops := pos.Pieces[constants.BLACKBISHOP]
 	for bishops != 0 {
 		bishopIdx := bits.TrailingZeros64(bishops)
-		ray, _ := getPosRay(pos.Occupied, uint32(bishopIdx), constants.DIRNE)
-		attacks |= ray
-		ray, _  = getPosRay(pos.Occupied, uint32(bishopIdx), constants.DIRNW)
-		attacks |= ray
-		ray, _  = getNegRay(pos.Occupied, uint32(bishopIdx), constants.DIRSE)
-		attacks |= ray
-		ray, _  = getNegRay(pos.Occupied, uint32(bishopIdx), constants.DIRSW)
-		attacks |= ray
+		ray1, _ := getPosRay(pos.Occupied, uint32(bishopIdx), constants.DIRNE)
+		ray2, _ := getPosRay(pos.Occupied, uint32(bishopIdx), constants.DIRNW)
+		ray3, _ := getNegRay(pos.Occupied, uint32(bishopIdx), constants.DIRSE)
+		ray4, _ := getNegRay(pos.Occupied, uint32(bishopIdx), constants.DIRSW)
+		attacks |= ray1 | ray2 | ray3 | ray4
 		bishops ^= 1<<bishopIdx
 	}
 	return attacks

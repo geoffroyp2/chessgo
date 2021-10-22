@@ -54,14 +54,11 @@ func wRookAttacks(pos *position.Position) uint64 {
 	rooks := pos.Pieces[constants.WHITEROOK]
 	for rooks != 0 {
 		rookIdx := bits.TrailingZeros64(rooks)
-		ray, _ := getPosRay(pos.Occupied, uint32(rookIdx), constants.DIRN)
-		attacks |= ray
-		ray, _  = getPosRay(pos.Occupied, uint32(rookIdx), constants.DIRE)
-		attacks |= ray
-		ray, _  = getNegRay(pos.Occupied, uint32(rookIdx), constants.DIRS)
-		attacks |= ray
-		ray, _  = getNegRay(pos.Occupied, uint32(rookIdx), constants.DIRW)
-		attacks |= ray
+		ray1, _ := getPosRay(pos.Occupied, uint32(rookIdx), constants.DIRN)
+		ray2, _ := getPosRay(pos.Occupied, uint32(rookIdx), constants.DIRE)
+		ray3, _ := getNegRay(pos.Occupied, uint32(rookIdx), constants.DIRS)
+		ray4, _ := getNegRay(pos.Occupied, uint32(rookIdx), constants.DIRW)
+		attacks |= ray1 | ray2 | ray3 | ray4
 		rooks ^= 1<<rookIdx
 	}
 	return attacks
@@ -72,14 +69,11 @@ func bRookAttacks(pos *position.Position) uint64 {
 	rooks := pos.Pieces[constants.BLACKROOK]
 	for rooks != 0 {
 		rookIdx := bits.TrailingZeros64(rooks)
-		ray, _ := getPosRay(pos.Occupied, uint32(rookIdx), constants.DIRN)
-		attacks |= ray
-		ray, _  = getPosRay(pos.Occupied, uint32(rookIdx), constants.DIRE)
-		attacks |= ray
-		ray, _  = getNegRay(pos.Occupied, uint32(rookIdx), constants.DIRS)
-		attacks |= ray
-		ray, _  = getNegRay(pos.Occupied, uint32(rookIdx), constants.DIRW)
-		attacks |= ray
+		ray1, _ := getPosRay(pos.Occupied, uint32(rookIdx), constants.DIRN)
+		ray2, _ := getPosRay(pos.Occupied, uint32(rookIdx), constants.DIRE)
+		ray3, _ := getNegRay(pos.Occupied, uint32(rookIdx), constants.DIRS)
+		ray4, _ := getNegRay(pos.Occupied, uint32(rookIdx), constants.DIRW)
+		attacks |= ray1 | ray2 | ray3 | ray4
 		rooks ^= 1<<rookIdx
 	}
 	return attacks
