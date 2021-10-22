@@ -21,14 +21,14 @@ const (
 
 // Directions
 const (
-	DIRN  = iota
-	DIRS  = iota
-	DIRE  = iota
-	DIRW  = iota
-	DIRNE = iota
-	DIRNW = iota
-	DIRSE = iota
-	DIRSW = iota
+	DIRN  uint32 = iota
+	DIRS  uint32 = iota
+	DIRE  uint32 = iota
+	DIRW  uint32 = iota
+	DIRNE uint32 = iota
+	DIRNW uint32 = iota
+	DIRSE uint32 = iota
+	DIRSW uint32 = iota
 )
 const DIRSTRAIGHT = 0
 const DIRDIAGONAL = 4
