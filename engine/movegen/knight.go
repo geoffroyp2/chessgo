@@ -106,3 +106,25 @@ func bKnightMoves(pos *position.Position, moveArray *constants.MoveArray, moveAm
 	return moveAmount
 }
 
+// Generate a simple BitBoard of squares that can be attacked by knights
+func wKnightAttacks(pos *position.Position) uint64 {
+	var attacks uint64 = 0
+	knights := pos.Pieces[constants.WHITEKNIGHT]
+	for knights != 0 {
+		knightIdx := bits.TrailingZeros64(knights)
+		attacks |= knightMovesLookup[knightIdx]
+		knights ^= 1 << knightIdx
+	}
+	return attacks
+}
+
+func bKnightAttacks(pos *position.Position) uint64 {
+	var attacks uint64 = 0
+	knights := pos.Pieces[constants.BLACKKNIGHT]
+	for knights != 0 {
+		knightIdx := bits.TrailingZeros64(knights)
+		attacks |= knightMovesLookup[knightIdx]
+		knights ^= 1 << knightIdx
+	}
+	return attacks
+}
