@@ -27,7 +27,7 @@ func GenerateMoves(pos *position.Position, moveArray *constants.MoveArray) int {
 
 func getWCapturedPiece(pos *position.Position, idx uint32) uint32 {
 	for pi := constants.WHITEKING; pi <= constants.WHITEPAWN; pi++ {
-		if pos.Pieces[pi] & (1 << idx) != 0 {
+		if pos.Pieces[pi] & (1<<idx) != 0 {
 			return pi
 		}
 	}
@@ -36,7 +36,7 @@ func getWCapturedPiece(pos *position.Position, idx uint32) uint32 {
 
 func getBCapturedPiece(pos *position.Position, idx uint32) uint32 {
 	for pi := constants.BLACKKING; pi <= constants.BLACKPAWN; pi++ {
-		if pos.Pieces[pi] & (1 << idx) != 0 {
+		if pos.Pieces[pi] & (1<<idx) != 0 {
 			return pi
 		}
 	}

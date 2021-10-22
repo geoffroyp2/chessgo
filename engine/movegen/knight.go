@@ -45,25 +45,18 @@ func wKnightMoves(pos *position.Position, moveArray *constants.MoveArray, moveAm
 			destIdx := uint32(bits.TrailingZeros64(destinations))
 			(*moveArray)[moveAmount] = move.CreateMove(knightIdx, destIdx, move.MOVE, constants.WHITEKNIGHT, constants.NULLPIECE)
 			moveAmount++
-			destinations ^= 1 << destIdx
+			destinations ^= 1<<destIdx
 		}
 
 		for captures != 0 {
-
 			destIdx := uint32(bits.TrailingZeros64(captures))
-			capturedPiece := constants.NULLPIECE
-			for pi := constants.BLACKKING; pi <= constants.BLACKPAWN; pi++ {
-				if pos.Pieces[pi] & (1 << destIdx) != 0 {
-					capturedPiece = pi
-				}
-			}
-
+			capturedPiece := getBCapturedPiece(pos, destIdx)
 			(*moveArray)[moveAmount] = move.CreateMove(knightIdx, destIdx, move.CAPTURE, constants.WHITEKNIGHT, capturedPiece)
 			moveAmount++
-			captures ^= 1 << destIdx
+			captures ^= 1<<destIdx
 		}
 
-		knights ^= 1 << knightIdx
+		knights ^= 1<<knightIdx
 	}
 
 	return moveAmount
@@ -82,25 +75,18 @@ func bKnightMoves(pos *position.Position, moveArray *constants.MoveArray, moveAm
 			destIdx := uint32(bits.TrailingZeros64(destinations))
 			(*moveArray)[moveAmount] = move.CreateMove(knightIdx, destIdx, move.MOVE, constants.BLACKKNIGHT, constants.NULLPIECE)
 			moveAmount++
-			destinations ^= 1 << destIdx
+			destinations ^= 1<<destIdx
 		}
 
 		for captures != 0 {
-
 			destIdx := uint32(bits.TrailingZeros64(captures))
-			capturedPiece := constants.NULLPIECE
-			for pi := constants.WHITEKING; pi <= constants.WHITEPAWN; pi++ {
-				if pos.Pieces[pi] & (1 << destIdx) != 0 {
-					capturedPiece = pi
-				}
-			}
-
+			capturedPiece := getWCapturedPiece(pos, destIdx)
 			(*moveArray)[moveAmount] = move.CreateMove(knightIdx, destIdx, move.CAPTURE, constants.BLACKKNIGHT, capturedPiece)
 			moveAmount++
-			captures ^= 1 << destIdx
+			captures ^= 1<<destIdx
 		}
 
-		knights ^= 1 << knightIdx
+		knights ^= 1<<knightIdx
 	}
 
 	return moveAmount

@@ -46,7 +46,7 @@ func wPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 		pawnIdx := uint32(bits.TrailingZeros64(normalMoves))
 		(*moveArray)[moveAmount] = move.CreateMove(pawnIdx, pawnIdx + 8, move.MOVE, constants.WHITEPAWN, constants.NULLPIECE)
 		moveAmount++
-		normalMoves ^= 1 << pawnIdx
+		normalMoves ^= 1<<pawnIdx
 	}
 
 	dblMoves := pushablePawns & bitboard.ShiftS(bitboard.ShiftS(pos.Empty & constants.Rank4)) // Empty rank 4 shifted 2 times
@@ -54,7 +54,7 @@ func wPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 		pawnIdx := uint32(bits.TrailingZeros64(dblMoves))
 		(*moveArray)[moveAmount] = move.CreateMove(pawnIdx, pawnIdx + 16, move.PMOVE2, constants.WHITEPAWN, constants.NULLPIECE)
 		moveAmount++
-		dblMoves ^= 1 << pawnIdx
+		dblMoves ^= 1<<pawnIdx
 	}
 
 	promotions := pushablePawns & constants.Rank7
@@ -65,7 +65,7 @@ func wPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 		(*moveArray)[moveAmount + 2] = move.CreateMove(pawnIdx, pawnIdx + 8, move.BPROM, constants.WHITEPAWN, constants.NULLPIECE)
 		(*moveArray)[moveAmount + 3] = move.CreateMove(pawnIdx, pawnIdx + 8, move.NPROM, constants.WHITEPAWN, constants.NULLPIECE)
 		moveAmount += 4
-		promotions ^= 1 << pawnIdx
+		promotions ^= 1<<pawnIdx
 	}
 
 	// Captures
@@ -79,10 +79,11 @@ func wPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 
 		for captures != 0 {
 			destIdx := uint32(bits.TrailingZeros64(captures))
-			capturedPiece := constants.BLACKPAWN // initialized to a black pawn for EP
+			// initialized to BLACKPAWN & EPCAPTURE for en-passant (because the capture square is empty)
+			capturedPiece := constants.BLACKPAWN 
 			moveType := move.EPCAPTURE
 			for pi := constants.BLACKKING; pi <= constants.BLACKPAWN; pi++ {
-				if pos.Pieces[pi] & (1 << destIdx) != 0 {
+				if pos.Pieces[pi] & (1<<destIdx) != 0 {
 					capturedPiece = pi
 					moveType = move.CAPTURE
 					break
@@ -90,10 +91,10 @@ func wPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 			}
 			(*moveArray)[moveAmount] = move.CreateMove(pawnIdx, destIdx, moveType, constants.WHITEPAWN, capturedPiece)
 			moveAmount++
-			captures ^= 1 << destIdx
+			captures ^= 1<<destIdx
 		}
 
-		normalPawns ^= 1 << pawnIdx
+		normalPawns ^= 1<<pawnIdx
 	}
 
 	promPawns := pos.Pieces[constants.WHITEPAWN] & constants.Rank7
@@ -103,22 +104,17 @@ func wPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 		
 		for captures != 0 {
 			destIdx := uint32(bits.TrailingZeros64(captures))
-			capturedPiece := constants.NULLPIECE 
-			for pi := constants.BLACKKING; pi <= constants.BLACKPAWN; pi++ {
-				if pos.Pieces[pi] & (1 << destIdx) != 0 {
-					capturedPiece = pi
-					break
-				}
-			}
+			capturedPiece := getBCapturedPiece(pos, destIdx)
+
 			(*moveArray)[moveAmount]     = move.CreateMove(pawnIdx, destIdx, move.QPROMCAPTURE, constants.WHITEPAWN, capturedPiece)
 			(*moveArray)[moveAmount + 1] = move.CreateMove(pawnIdx, destIdx, move.RPROMCAPTURE, constants.WHITEPAWN, capturedPiece)
 			(*moveArray)[moveAmount + 2] = move.CreateMove(pawnIdx, destIdx, move.BPROMCAPTURE, constants.WHITEPAWN, capturedPiece)
 			(*moveArray)[moveAmount + 3] = move.CreateMove(pawnIdx, destIdx, move.NPROMCAPTURE, constants.WHITEPAWN, capturedPiece)
 			moveAmount += 4
-			captures ^= 1 << destIdx
+			captures ^= 1<<destIdx
 		}
 
-		promPawns ^= 1 << pawnIdx
+		promPawns ^= 1<<pawnIdx
 	}
 
 	return moveAmount
@@ -133,7 +129,7 @@ func bPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 		pawnIdx := uint32(bits.TrailingZeros64(normalMoves))
 		(*moveArray)[moveAmount] = move.CreateMove(pawnIdx, pawnIdx - 8, move.MOVE, constants.BLACKPAWN, constants.NULLPIECE)
 		moveAmount++
-		normalMoves ^= 1 << pawnIdx
+		normalMoves ^= 1<<pawnIdx
 	}
 
 	dblMoves := pushablePawns & bitboard.ShiftN(bitboard.ShiftN(pos.Empty & constants.Rank5))
@@ -141,7 +137,7 @@ func bPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 		pawnIdx := uint32(bits.TrailingZeros64(dblMoves))
 		(*moveArray)[moveAmount] = move.CreateMove(pawnIdx, pawnIdx - 16, move.PMOVE2, constants.BLACKPAWN, constants.NULLPIECE)
 		moveAmount++
-		dblMoves ^= 1 << pawnIdx
+		dblMoves ^= 1<<pawnIdx
 	}
 
 	promotions := pushablePawns & constants.Rank2
@@ -152,11 +148,10 @@ func bPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 		(*moveArray)[moveAmount + 2] = move.CreateMove(pawnIdx, pawnIdx - 8, move.BPROM, constants.BLACKPAWN, constants.NULLPIECE)
 		(*moveArray)[moveAmount + 3] = move.CreateMove(pawnIdx, pawnIdx - 8, move.NPROM, constants.BLACKPAWN, constants.NULLPIECE)
 		moveAmount += 4
-		promotions ^= 1 << pawnIdx
+		promotions ^= 1<<pawnIdx
 	}
 
 	// Captures
-	// All opponents pieces + En-passant square (==> Shift by 2 more then back to discard set bit if EPSquare is not set (= 63))
 	captureTargets := pos.AllWhite | uint64((1 << (pos.GetEPSquare() + 2)) >> 2)
 	
 	normalPawns := pos.Pieces[constants.BLACKPAWN] & constants.NotRank2
@@ -166,10 +161,10 @@ func bPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 
 		for captures != 0 {
 			destIdx := uint32(bits.TrailingZeros64(captures))
-			capturedPiece := constants.WHITEPAWN // initialized to a black pawn for EP
+			capturedPiece := constants.WHITEPAWN
 			moveType := move.EPCAPTURE
 			for pi := constants.WHITEKING; pi <= constants.WHITEPAWN; pi++ {
-				if pos.Pieces[pi] & (1 << destIdx) != 0 {
+				if pos.Pieces[pi] & (1<<destIdx) != 0 {
 					capturedPiece = pi
 					moveType = move.CAPTURE
 					break
@@ -177,10 +172,10 @@ func bPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 			}
 			(*moveArray)[moveAmount] = move.CreateMove(pawnIdx, destIdx, moveType, constants.BLACKPAWN, capturedPiece)
 			moveAmount++
-			captures ^= 1 << destIdx
+			captures ^= 1<<destIdx
 		}
 
-		normalPawns ^= 1 << pawnIdx
+		normalPawns ^= 1<<pawnIdx
 	}
 
 	promPawns := pos.Pieces[constants.BLACKPAWN] & constants.Rank2
@@ -190,22 +185,17 @@ func bPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 		
 		for captures != 0 {
 			destIdx := uint32(bits.TrailingZeros64(captures))
-			capturedPiece := constants.NULLPIECE // No need to check for En-passant
-			for pi := constants.WHITEKING; pi <= constants.WHITEPAWN; pi++ {
-				if pos.Pieces[pi] & (1 << destIdx) != 0 {
-					capturedPiece = pi
-					break
-				}
-			}
+			capturedPiece := getWCapturedPiece(pos, destIdx)
+
 			(*moveArray)[moveAmount]     = move.CreateMove(pawnIdx, destIdx, move.QPROMCAPTURE, constants.BLACKPAWN, capturedPiece)
 			(*moveArray)[moveAmount + 1] = move.CreateMove(pawnIdx, destIdx, move.RPROMCAPTURE, constants.BLACKPAWN, capturedPiece)
 			(*moveArray)[moveAmount + 2] = move.CreateMove(pawnIdx, destIdx, move.BPROMCAPTURE, constants.BLACKPAWN, capturedPiece)
 			(*moveArray)[moveAmount + 3] = move.CreateMove(pawnIdx, destIdx, move.NPROMCAPTURE, constants.BLACKPAWN, capturedPiece)
 			moveAmount += 4
-			captures ^= 1 << destIdx
+			captures ^= 1<<destIdx
 		}
 
-		promPawns ^= 1 << pawnIdx
+		promPawns ^= 1<<pawnIdx
 	}
 
 	return moveAmount
@@ -218,7 +208,7 @@ func wPawnAttacks(pos *position.Position) uint64 {
 	for pawns != 0 {
 		pawnIdx := bits.TrailingZeros64(pawns)
 		attacks |= wPawnCapturesLookup[pawnIdx]
-		pawns ^= 1 << pawnIdx
+		pawns ^= 1<<pawnIdx
 	}
 	return attacks
 }
@@ -229,7 +219,7 @@ func bPawnAttacks(pos *position.Position) uint64 {
 	for pawns != 0 {
 		pawnIdx := bits.TrailingZeros64(pawns)
 		attacks |= bPawnCapturesLookup[pawnIdx]
-		pawns ^= 1 << pawnIdx
+		pawns ^= 1<<pawnIdx
 	}
 	return attacks
 }
