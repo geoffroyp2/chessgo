@@ -28,7 +28,7 @@ func (pos *Position) GetCastleRights() uint16 {
 }
 
 func (pos *Position) GetCastleRight(idx uint16 /*KQkq*/) bool {
-	return pos.Flags&(1<<(cr_o+4-idx)) != 0
+	return pos.Flags&(1<<(cr_o+3-idx)) != 0
 }
 
 func (pos *Position) SetCastleRights(newVal uint16) {
