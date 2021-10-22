@@ -10,15 +10,16 @@ func GenerateMoves(pos *position.Position, moveArray *constants.MoveArray) int {
 
 	if pos.GetPlayerTurn() == 0 {
 
-		moveAmount = wPawnAllMoves(pos, moveArray, moveAmount)
+		moveAmount = wPawnMoves(pos, moveArray, moveAmount)
 		moveAmount = wKnightMoves(pos, moveArray, moveAmount)
 		
 	} else {
 			
-		moveAmount = bPawnAllMoves(pos, moveArray, moveAmount)
+		moveAmount = bPawnMoves(pos, moveArray, moveAmount)
 		moveAmount = bKnightMoves(pos, moveArray, moveAmount)
 
 	}
 
 	return moveAmount
 }
+
