@@ -210,3 +210,26 @@ func bPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 
 	return moveAmount
 }
+
+// Generate a simple BitBoard of squares that can be attacked by pawns
+func wPawnAttacks(pos *position.Position) uint64 {
+	var attacks uint64 = 0
+	pawns := pos.Pieces[constants.WHITEPAWN]
+	for pawns != 0 {
+		pawnIdx := bits.TrailingZeros64(pawns)
+		attacks |= wPawnCapturesLookup[pawnIdx]
+		pawns ^= 1 << pawnIdx
+	}
+	return attacks
+}
+
+func bPawnAttacks(pos *position.Position) uint64 {
+	var attacks uint64 = 0
+	pawns := pos.Pieces[constants.BLACKPAWN]
+	for pawns != 0 {
+		pawnIdx := bits.TrailingZeros64(pawns)
+		attacks |= bPawnCapturesLookup[pawnIdx]
+		pawns ^= 1 << pawnIdx
+	}
+	return attacks
+}
