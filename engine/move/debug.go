@@ -4,13 +4,13 @@ import (
 	"fmt"
 
 	"github.com/geoffroyp2/chessgo/engine/constants"
-	"github.com/geoffroyp2/chessgo/engine/engineutils"
+	"github.com/geoffroyp2/chessgo/engine/stringutils"
 )
 
 func PrintMove(move uint32) {
 
-	mFrom := engineutils.IdxToCoordString(uint16(From(move)))
-	mTo := engineutils.IdxToCoordString(uint16(To(move)))
+	mFrom := stringutils.IdxToCoordString(uint16(From(move)))
+	mTo := stringutils.IdxToCoordString(uint16(To(move)))
 	typeString := getMoveTypeString(Type(move))
 	mainPiece := getPieceString(MainPiece(move))
 	extraPiece := getPieceString(ExtraPiece(move))

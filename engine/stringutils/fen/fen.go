@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/geoffroyp2/chessgo/engine/constants"
-	"github.com/geoffroyp2/chessgo/engine/engineutils"
 	"github.com/geoffroyp2/chessgo/engine/position"
+	"github.com/geoffroyp2/chessgo/engine/stringutils"
 )
 
 
@@ -95,7 +95,7 @@ func PositionFromFEN(FEN *string) *position.Position {
 	}
 
 	// Section 3: En-passant square
-	val1, err := engineutils.CoordStringToIdx(&sections[3])
+	val1, err := stringutils.CoordStringToIdx(&sections[3])
 	if err != nil {
 		newPos.SetEPSquare(constants.EPSQUARE_NONE)
 	} else {

@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/geoffroyp2/chessgo/engine/constants"
-	"github.com/geoffroyp2/chessgo/engine/engineutils"
+	"github.com/geoffroyp2/chessgo/engine/stringutils"
 )
 
 func (pos *Position) PrintPosition() {
@@ -41,7 +41,7 @@ func (pos *Position) PrintPosition() {
 			EPSquare := pos.GetEPSquare()
 			EPSquareString := "-"
 			if EPSquare != constants.EPSQUARE_NONE {
-				EPSquareString = *engineutils.IdxToCoordString(EPSquare)
+				EPSquareString = *stringutils.IdxToCoordString(EPSquare)
 			}
 			sb.WriteString(fmt.Sprintf(" |  En-passant: %s", EPSquareString))
 			break
