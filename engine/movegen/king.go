@@ -1,6 +1,7 @@
 package movegen
 
 import (
+	"fmt"
 	"math/bits"
 
 	"github.com/geoffroyp2/chessgo/engine/constants"
@@ -26,6 +27,10 @@ var kingMovesLookup = [64]uint64{
 	0x2838   << (8*6), 0x5070   << (8*6), 0xA0E0   << (8*6), 0x40C0   << (8*6),
 }
 
+// KQkq
+var castleBlockLookup = [4]uint64{ 0x60, 0xE, 0x6000000000000000, 0xE00000000000000 }
+var castleCheckLookup = [4]uint64{ 0x70, 0x1C, 0x7000000000000000, 0x1C00000000000000 }
+
 func wKingMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmount int, safeFromEnnemy uint64) int {
 
 	king := pos.Pieces[constants.WHITEKING]
@@ -48,6 +53,25 @@ func wKingMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 		captures ^= 1 << destIdx
 	}
 
+	// Castle
+	if kingIdx == 4 &&
+	   pos.GetCastleRight(0) &&
+	   pos.Pieces[constants.WHITEROOK] & 0x80 > 0 && 
+		 pos.Occupied & castleBlockLookup[0] == 0 &&
+		 ^safeFromEnnemy & castleCheckLookup[0] == 0 {
+		(*moveArray)[moveAmount] = move.CreateMove(kingIdx, 6, move.KCASTLE, constants.WHITEKING, constants.NULLPIECE)
+		moveAmount++
+	}
+
+	if kingIdx == 4 &&
+	   pos.GetCastleRight(1) && 
+	   pos.Pieces[constants.WHITEROOK] & 0x1 > 0 && 
+		 pos.Occupied & castleBlockLookup[1] == 0 &&
+		 ^safeFromEnnemy & castleCheckLookup[1] == 0 {
+		(*moveArray)[moveAmount] = move.CreateMove(kingIdx, 2, move.QCASTLE, constants.WHITEKING, constants.NULLPIECE)
+		moveAmount++
+	}
+
 	return moveAmount
 }
 
@@ -67,10 +91,34 @@ func bKingMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 
 	for captures != 0 {
 		destIdx := uint32(bits.TrailingZeros64(captures))
-		capturedPiece := getBCapturedPiece(pos, destIdx)
+		capturedPiece := getWCapturedPiece(pos, destIdx)
 		(*moveArray)[moveAmount] = move.CreateMove(kingIdx, destIdx, move.CAPTURE, constants.BLACKKING, capturedPiece)
 		moveAmount++
 		captures ^= 1 << destIdx
+	}
+
+	ck := pos.GetCastleRight(2)
+	cq := pos.GetCastleRight(3)
+	fmt.Println(ck, cq)
+
+	
+	// Castle
+	if kingIdx == 60 &&
+	   pos.GetCastleRight(2) && 
+	   pos.Pieces[constants.BLACKROOK] & 0x8000000000000000 > 0 && 
+		 pos.Occupied & castleBlockLookup[2] == 0 &&
+		 ^safeFromEnnemy & castleCheckLookup[2] == 0 {
+		(*moveArray)[moveAmount] = move.CreateMove(kingIdx, 62, move.KCASTLE, constants.BLACKKING, constants.NULLPIECE)
+		moveAmount++
+	}
+
+	if kingIdx == 60 &&
+	   pos.GetCastleRight(3) && 
+	   pos.Pieces[constants.BLACKROOK] & 0x100000000000000 > 0 && 
+		 pos.Occupied & castleBlockLookup[3] == 0 &&
+		 ^safeFromEnnemy & castleCheckLookup[3] == 0 {
+		(*moveArray)[moveAmount] = move.CreateMove(kingIdx, 58, move.QCASTLE, constants.BLACKKING, constants.NULLPIECE)
+		moveAmount++
 	}
 
 	return moveAmount
@@ -78,7 +126,7 @@ func bKingMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 
 // Generate a simple BitBoard of squares that can be attacked by the king
 func wKingAttacks(pos *position.Position) uint64 {
-	kingIdx := bits.TrailingZeros64(pos.Pieces[constants.WHITEKNIGHT])
+	kingIdx := bits.TrailingZeros64(pos.Pieces[constants.WHITEKING])
 	return kingMovesLookup[kingIdx]
 }
 
