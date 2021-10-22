@@ -1,5 +1,9 @@
 package movegen
 
+/*
+https://www.chessprogramming.org/Knight_Pattern
+*/
+
 import (
 	"math/bits"
 
@@ -32,19 +36,19 @@ func wKnightMoves(pos *position.Position, moveArray *constants.MoveArray, moveAm
 
 	knights := pos.Pieces[constants.WHITEKNIGHT]
 
-	for ; knights != 0 ; {
+	for knights != 0 {
 		knightIdx := uint32(bits.TrailingZeros64(knights))
 		destinations := knightMovesLookup[knightIdx] & pos.Empty
 		captures := knightMovesLookup[knightIdx] & pos.AllBlack
 
-		for ; destinations != 0 ; {
+		for destinations != 0 {
 			destIdx := uint32(bits.TrailingZeros64(destinations))
 			(*moveArray)[moveAmount] = move.CreateMove(knightIdx, destIdx, move.MOVE, constants.WHITEKNIGHT, constants.NULLPIECE)
 			moveAmount++
 			destinations ^= 1 << destIdx
 		}
 
-		for ; captures != 0 ; {
+		for captures != 0 {
 
 			destIdx := uint32(bits.TrailingZeros64(captures))
 			capturedPiece := constants.NULLPIECE
@@ -69,19 +73,19 @@ func bKnightMoves(pos *position.Position, moveArray *constants.MoveArray, moveAm
 
 	knights := pos.Pieces[constants.BLACKKNIGHT]
 
-	for ; knights != 0 ; {
+	for knights != 0 {
 		knightIdx := uint32(bits.TrailingZeros64(knights))
 		destinations := knightMovesLookup[knightIdx] & pos.Empty
 		captures := knightMovesLookup[knightIdx] & pos.AllWhite
 
-		for ; destinations != 0 ; {
+		for destinations != 0 {
 			destIdx := uint32(bits.TrailingZeros64(destinations))
 			(*moveArray)[moveAmount] = move.CreateMove(knightIdx, destIdx, move.MOVE, constants.BLACKKNIGHT, constants.NULLPIECE)
 			moveAmount++
 			destinations ^= 1 << destIdx
 		}
 
-		for ; captures != 0 ; {
+		for captures != 0 {
 
 			destIdx := uint32(bits.TrailingZeros64(captures))
 			capturedPiece := constants.NULLPIECE
