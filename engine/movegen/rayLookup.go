@@ -1,5 +1,32 @@
 package movegen
 
+import "math/bits"
+
+// Returns the set  of moves in the specified direction + true if the ray was blocked by another piece
+// The difference between positive and negative is the direction of the bitscan to find the 1st blocker
+// The blocked square is part of the ray
+// Positive is NW, N, NE, E
+func getPosRay(occupied uint64, idx, dir uint32) (uint64, bool) {
+	attacks := rayLookup[dir][idx]
+	blocker := attacks & occupied
+	if blocker != 0 {
+		bIdx := bits.TrailingZeros64(blocker)
+		return attacks ^ rayLookup[dir][bIdx], true
+	}
+	return attacks, false
+}
+
+// Negative is W, SW, S, SE
+func getNegRay(occupied uint64, idx, dir uint32) (uint64, bool) {
+	attacks := rayLookup[dir][idx]
+	blocker := attacks & occupied
+	if blocker != 0 {
+		bIdx := bits.Len64(blocker) - 1
+		return attacks ^ rayLookup[dir][bIdx], true
+	}
+	return attacks, false
+}
+
 var rayLookup = [8][64]uint64{
 	{ // N
 		0x101010101010100, 0x202020202020200, 0x404040404040400, 0x808080808080800, 0x1010101010101000, 0x2020202020202000, 0x4040404040404000, 0x8080808080808000,
