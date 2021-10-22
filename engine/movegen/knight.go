@@ -99,7 +99,7 @@ func wKnightAttacks(pos *position.Position) uint64 {
 	for knights != 0 {
 		knightIdx := bits.TrailingZeros64(knights)
 		attacks |= knightMovesLookup[knightIdx]
-		knights ^= 1 << knightIdx
+		knights ^= 1<<knightIdx
 	}
 	return attacks
 }
@@ -110,7 +110,7 @@ func bKnightAttacks(pos *position.Position) uint64 {
 	for knights != 0 {
 		knightIdx := bits.TrailingZeros64(knights)
 		attacks |= knightMovesLookup[knightIdx]
-		knights ^= 1 << knightIdx
+		knights ^= 1<<knightIdx
 	}
 	return attacks
 }
