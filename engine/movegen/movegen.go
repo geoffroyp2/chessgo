@@ -10,19 +10,35 @@ func GenerateMoves(pos *position.Position, moveArray *constants.MoveArray) int {
 
 	if pos.GetPlayerTurn() == constants.PLAYERWHITE {
 
-		moveAmount = wPawnMoves(pos, moveArray, moveAmount)
-		moveAmount = wKnightMoves(pos, moveArray, moveAmount)
+		ennemyAttacks := bQueenAttacks(pos)
+		ennemyAttacks |= bKingAttacks(pos)
+		ennemyAttacks |= bRookAttacks(pos)
+		ennemyAttacks |= bBishopAttacks(pos)
+		ennemyAttacks |= bKnightAttacks(pos)
+		ennemyAttacks |= bPawnAttacks(pos)
+
+		moveAmount = wKingMoves(pos, moveArray, moveAmount, ^ennemyAttacks)
+		moveAmount = wQueenMoves(pos, moveArray, moveAmount)
 		moveAmount = wRookMoves(pos, moveArray, moveAmount)
 		moveAmount = wBishopMoves(pos, moveArray, moveAmount)
-		moveAmount = wQueenMoves(pos, moveArray, moveAmount)
+		moveAmount = wKnightMoves(pos, moveArray, moveAmount)
+		moveAmount = wPawnMoves(pos, moveArray, moveAmount)
 		
 	} else {
-			
-		moveAmount = bPawnMoves(pos, moveArray, moveAmount)
-		moveAmount = bKnightMoves(pos, moveArray, moveAmount)
+
+		ennemyAttacks := wQueenAttacks(pos)
+		ennemyAttacks |= wKingAttacks(pos)
+		ennemyAttacks |= wRookAttacks(pos)
+		ennemyAttacks |= wBishopAttacks(pos)
+		ennemyAttacks |= wKnightAttacks(pos)
+		ennemyAttacks |= wPawnAttacks(pos)
+		
+		moveAmount = bKingMoves(pos, moveArray, moveAmount, ^ennemyAttacks)
+		moveAmount = bQueenMoves(pos, moveArray, moveAmount)
 		moveAmount = bRookMoves(pos, moveArray, moveAmount)
 		moveAmount = bBishopMoves(pos, moveArray, moveAmount)
-		moveAmount = bQueenMoves(pos, moveArray, moveAmount)
+		moveAmount = bKnightMoves(pos, moveArray, moveAmount)
+		moveAmount = bPawnMoves(pos, moveArray, moveAmount)
 
 	}
 
