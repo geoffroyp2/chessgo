@@ -41,7 +41,7 @@ func wPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 	// Quiet moves
 	pushablePawns := bitboard.ShiftS(pos.Empty) & pos.Pieces[constants.WHITEPAWN]
 	
-	normalMoves := pushablePawns & ^constants.Rank7
+	normalMoves := pushablePawns & constants.NotRank7
 	for normalMoves != 0 {
 		pawnIdx := uint32(bits.TrailingZeros64(normalMoves))
 		(*moveArray)[moveAmount] = move.CreateMove(pawnIdx, pawnIdx + 8, move.MOVE, constants.WHITEPAWN, constants.NULLPIECE)
@@ -72,7 +72,7 @@ func wPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 	// All opponents pieces + En-passant square (==> Shift by 2 more then back to discard set bit if EPSquare is not set (= 63))
 	captureTargets := pos.AllBlack | uint64((1 << (pos.GetEPSquare() + 2)) >> 2)
 	
-	normalPawns := pos.Pieces[constants.WHITEPAWN] & ^constants.Rank7
+	normalPawns := pos.Pieces[constants.WHITEPAWN] & constants.NotRank7
 	for normalPawns != 0 {
 		pawnIdx := uint32(bits.TrailingZeros64(normalPawns))
 		captures := wPawnCapturesLookup[pawnIdx] & captureTargets
@@ -128,7 +128,7 @@ func bPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 	// Quiet moves
 	pushablePawns := bitboard.ShiftN(pos.Empty) & pos.Pieces[constants.BLACKPAWN]
 	
-	normalMoves := pushablePawns & ^constants.Rank2
+	normalMoves := pushablePawns & constants.NotRank2
 	for normalMoves != 0 {
 		pawnIdx := uint32(bits.TrailingZeros64(normalMoves))
 		(*moveArray)[moveAmount] = move.CreateMove(pawnIdx, pawnIdx - 8, move.MOVE, constants.BLACKPAWN, constants.NULLPIECE)
@@ -159,7 +159,7 @@ func bPawnMoves(pos *position.Position, moveArray *constants.MoveArray, moveAmou
 	// All opponents pieces + En-passant square (==> Shift by 2 more then back to discard set bit if EPSquare is not set (= 63))
 	captureTargets := pos.AllWhite | uint64((1 << (pos.GetEPSquare() + 2)) >> 2)
 	
-	normalPawns := pos.Pieces[constants.BLACKPAWN] & ^constants.Rank2
+	normalPawns := pos.Pieces[constants.BLACKPAWN] & constants.NotRank2
 	for normalPawns != 0 {
 		pawnIdx := uint32(bits.TrailingZeros64(normalPawns))
 		captures := bPawnCapturesLookup[pawnIdx] & captureTargets
