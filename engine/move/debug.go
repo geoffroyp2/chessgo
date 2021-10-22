@@ -40,18 +40,18 @@ func getMoveTypeString(t uint32) string {
 
 func getPieceString(p uint32) string {
 	switch p {
-	case constants.WHITEKING:   return "White King"
-	case constants.WHITEQUEEN:  return "White Queen"
-	case constants.WHITEROOK:   return "White Rook"
-	case constants.WHITEBISHOP: return "White Bishop"
-	case constants.WHITEKNIGHT: return "White Knight"
-	case constants.WHITEPAWN:   return "White Pawn"
-	case constants.BLACKKING:   return "Black King"
-	case constants.BLACKQUEEN:  return "Black Queen"
-	case constants.BLACKROOK:   return "Black Rook"
-	case constants.BLACKBISHOP: return "Black Bishop"
-	case constants.BLACKKNIGHT: return "Black Knight"
-	case constants.BLACKPAWN:   return "Black Pawn"
+		case constants.WHITEKING:   return "White King"
+		case constants.WHITEQUEEN:  return "White Queen"
+		case constants.WHITEROOK:   return "White Rook"
+		case constants.WHITEBISHOP: return "White Bishop"
+		case constants.WHITEKNIGHT: return "White Knight"
+		case constants.WHITEPAWN:   return "White Pawn"
+		case constants.BLACKKING:   return "Black King"
+		case constants.BLACKQUEEN:  return "Black Queen"
+		case constants.BLACKROOK:   return "Black Rook"
+		case constants.BLACKBISHOP: return "Black Bishop"
+		case constants.BLACKKNIGHT: return "Black Knight"
+		case constants.BLACKPAWN:   return "Black Pawn"
 	}
 	return ""
 }
