@@ -28,7 +28,7 @@ func (pos *Position) GetCastleRights() uint16 {
 }
 
 func (pos *Position) GetCastleRight(idx uint16 /*KQkq*/) bool {
-	return pos.Flags&(1<<(cr_o+3-idx)) != 0
+	return pos.Flags&(1<<(cr_o+idx)) != 0
 }
 
 func (pos *Position) SetCastleRights(newVal uint16) {
@@ -36,7 +36,11 @@ func (pos *Position) SetCastleRights(newVal uint16) {
 }
 
 func (pos *Position) ToggleCastleRigth(idx uint16 /*KQkq*/) {
-	pos.Flags ^= 1 << (cr_o + 3 - idx)
+	pos.Flags ^= 1 << (cr_o + idx)
+}
+
+func (pos *Position) RemoveCastleRights(color uint16) {
+	pos.Flags ^= (0x3) << (cr_o + 1 + 2*color)
 }
 
 // En-passant square

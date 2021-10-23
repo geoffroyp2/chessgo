@@ -41,7 +41,7 @@ func (pos *Position) PrintPosition() {
 			EPSquare := pos.GetEPSquare()
 			EPSquareString := "-"
 			if EPSquare != constants.EPSQUARE_NONE {
-				EPSquareString = *stringutils.IdxToCoordString(EPSquare)
+				EPSquareString = stringutils.IdxToCoordString(EPSquare)
 			}
 			sb.WriteString(fmt.Sprintf(" |  En-passant: %s", EPSquareString))
 			break

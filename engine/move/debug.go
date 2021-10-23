@@ -15,8 +15,21 @@ func PrintMove(move uint32) {
 	mainPiece := getPieceString(MainPiece(move))
 	extraPiece := getPieceString(ExtraPiece(move))
 
-	fmt.Printf("%s %s%s %s %s\n", mainPiece, *mFrom, *mTo, typeString, extraPiece)
+	fmt.Printf("%s %s%s %s %s\n", mainPiece, mFrom, mTo, typeString, extraPiece)
 }
+
+func GetMoveString(m uint32) string {
+	from := stringutils.IdxToCoordString(uint16(From(m)))
+	to := stringutils.IdxToCoordString(uint16(To(m)))
+
+	if IsPromotion(m) {
+		promRunes := [4]string{"Q", "R", "B", "N"}
+		prom := promRunes[GetPromotionTarget(m)]
+		return fmt.Sprintf("%s%s=%s", from, to, prom)
+	}
+	return fmt.Sprintf("%s%s", from, to)
+}
+
 
 func getMoveTypeString(t uint32) string {
 	switch t {

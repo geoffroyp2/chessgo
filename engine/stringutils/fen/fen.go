@@ -73,14 +73,7 @@ func PositionFromFEN(FEN *string) *position.Position {
 		}
 	}
 	// Create union of all White & all Black pieces + occupied & empty sets
-	for idx := 0; idx < 6; idx++ {
-		newPos.AllWhite |= newPos.Pieces[idx]
-	}
-	for idx := 6; idx < 12; idx++ {
-		newPos.AllBlack |= newPos.Pieces[idx]
-	}
-	newPos.Occupied = newPos.AllWhite | newPos.AllBlack
-	newPos.Empty = ^newPos.Occupied
+	newPos.ComputeUnions()
 
 	// Section 1: player turn
 	if sections[1] == "b" {

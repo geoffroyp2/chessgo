@@ -20,7 +20,6 @@ func CoordStringToIdx(coord *string) (uint16, error) {
 }
 
 // ex: 0 -> a1, 63 -> g8
-func IdxToCoordString(idx uint16) *string {
-	cs := fmt.Sprintf("%s%d", string(rune(idx % 8 + 'a')), idx / 8 + 1)
-	return &cs
+func IdxToCoordString(idx uint16) string {
+	return fmt.Sprintf("%s%d", string(rune(idx % 8 + 'a')), idx / 8 + 1)
 }
