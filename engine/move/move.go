@@ -1,5 +1,7 @@
 package move
 
+import "github.com/geoffroyp2/chessgo/engine/constants"
+
 // 24 bits are used to encode: from square, to square, move type, main piece, extra piece (capture)
 // 8 bits left for heuristics for later
 const (
@@ -44,4 +46,14 @@ func IsCapture(move uint32) bool {
 
 func IsPromotion(move uint32) bool {
 	return Type(move)&PROMMASK != 0
+}
+
+func GetPromotionTarget(move uint32) uint32 {
+	switch Type(move)&PROMPIECEMASK {
+	case 0b00: return constants.GENERICQUEEN
+	case 0b01: return constants.GENERICROOK
+	case 0b10: return constants.GENERICBISHOP
+	case 0b11: return constants.GENERICKNIGHT
+	}
+	return constants.GENERICQUEEN
 }

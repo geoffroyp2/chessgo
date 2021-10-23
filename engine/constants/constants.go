@@ -24,6 +24,16 @@ const (
 	NULLPIECE   uint32 = 0xF
 )
 
+// Generic types (black + white)
+const (
+	GENERICKING   uint32 = iota
+	GENERICQUEEN  uint32 = iota
+	GENERICROOK   uint32 = iota
+	GENERICBISHOP uint32 = iota
+	GENERICKNIGHT uint32 = iota
+	GENERICPAWN   uint32 = iota
+)
+
 // Directions
 const (
 	DIRN  uint32 = iota
